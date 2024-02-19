@@ -109,6 +109,17 @@ contract MultiSigWallet {
         signers.push(_newSigner);
     }
 
+    function removeSigner(uint _index) external {
+        onlyOwner();
+        require(_index < signers.length, "Invalid index");
+
+        signers[_index] = signers[signers.length - 1];
+
+        isValidSigner[signers[_index]] = false;
+
+        signers.pop();
+    }
+
     function getAllTransactions() external view returns (Transaction[] memory) {
         return allTransactions;
     }
