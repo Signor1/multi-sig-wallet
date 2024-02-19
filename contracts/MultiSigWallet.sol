@@ -31,4 +31,17 @@ contract MultiSigWallet {
     //mapping of address to bool
     //used to check the list of true signers
     mapping(address => bool) isValidSigner;
+
+    constructor(address[] memory _validSigners, uint256 _quorum) {
+        owner = msg.sender;
+        signers = _validSigners;
+        quorum = _quorum;
+
+        for (uint8 i = 0; i < _validSigners.length; i++) {
+            //checking if any of the addresses is a zero address
+            require(_validSigners[i] != address(0), "get out");
+
+            isValidSigner[_validSigners[i]] = true;
+        }
+    }
 }
