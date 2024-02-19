@@ -115,9 +115,10 @@ contract MultiSigWallet {
 
         signers[_index] = signers[signers.length - 1];
 
-        isValidSigner[signers[_index]] = false;
+        require(isValidSigner[signers[_index]], "Not a signer");
 
         signers.pop();
+        isValidSigner[signers[_index]] = false;
     }
 
     function getAllTransactions() external view returns (Transaction[] memory) {
