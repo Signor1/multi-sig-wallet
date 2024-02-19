@@ -108,4 +108,8 @@ contract MultiSigWallet {
         isValidSigner[_newSigner] = true;
         signers.push(_newSigner);
     }
+
+    function getAllTransactions() external view returns (Transaction[] memory) {
+        return allTransactions;
+    }
 }
