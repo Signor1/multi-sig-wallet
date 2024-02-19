@@ -112,4 +112,12 @@ contract MultiSigWallet {
     function getAllTransactions() external view returns (Transaction[] memory) {
         return allTransactions;
     }
+
+    function onlyOwner() private view {
+        require(msg.sender == owner, "not owner");
+    }
+
+    function onlyValidSigner() private view {
+        require(isValidSigner[msg.sender], "not valid signer");
+    }
 }
