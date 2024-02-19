@@ -120,4 +120,20 @@ contract MultiSigWallet {
     function onlyValidSigner() private view {
         require(isValidSigner[msg.sender], "not valid signer");
     }
+
+    //Owner transfer
+    //So ownership when transfered needs to be claim, if not, the current owner still remains the owner
+    function transferOwnership(address _newOwner) external {
+        onlyOwner();
+
+        nextOwner = _newOwner;
+    }
+
+    function claimOwnership() external {
+        require(msg.sender == nextOwner, "not next owner");
+
+        owner = msg.sender;
+
+        nextOwner = address(0);
+    }
 }
