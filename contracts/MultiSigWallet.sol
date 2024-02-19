@@ -136,4 +136,9 @@ contract MultiSigWallet {
 
         nextOwner = address(0);
     }
+
+    //these two methods below makes it possble for this contract to receive ether
+    receive() external payable {}
+
+    fallback() external payable {}
 }
