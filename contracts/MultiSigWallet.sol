@@ -109,6 +109,7 @@ contract MultiSigWallet {
         signers.push(_newSigner);
     }
 
+    //only to be called by the owner
     function removeSigner(uint _index) external {
         onlyOwner();
         require(_index < signers.length, "Invalid index");
