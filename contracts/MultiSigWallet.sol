@@ -19,4 +19,16 @@ contract MultiSigWallet {
     }
 
     Transaction[] allTransactions;
+
+    // mapping of transaction id to signer address returning bool:
+    // this checks if a valid signer has signed a trasaction
+    mapping(uint256 => mapping(address => bool)) hasSigned;
+
+    // mapping of transaction id to transaction struct
+    // used to track transactions given their ID;
+    mapping(uint256 => Transaction) transactions;
+
+    //mapping of address to bool
+    //used to check the list of true signers
+    mapping(address => bool) isValidSigner;
 }
