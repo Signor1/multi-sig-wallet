@@ -70,4 +70,32 @@ contract MultiSigWallet {
 
         txCount = txCount + 1;
     }
+
+    //approve transaction
+    //this method would transfer the ether if the quorum is reached
+    function approveTransaction(uint256 _txId) external {
+        require(_txId <= txCount, "invalid transaction id");
+        require(msg.sender != address(0), "zero address detected");
+
+        onlyValidSigner();
+
+        require(!hasSigned[_txId][msg.sender], "can't sign twice");
+        Transaction storage tns = transactions[_txId];
+        require(
+            address(this).balance >= tns.amount,
+            "insufficient contract balance"
+        );
+
+        require(!tns.isExecuted, "transaction already executed");
+        require(tns.signersCount < quorum, "quorum count reached");
+
+        tns.signersCount = tns.signersCount + 1;
+
+        hasSigned[_txId][msg.sender] = true;
+
+        if (tns.signersCount == quorum) {
+            tns.isExecuted = true;
+            payable(tns.receiver).transfer(tns.amount);
+        }
+    }
 }
