@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
 
+//this contract should have ether for it to function as supposed
 contract MultiSigWallet {
     address owner;
     address nextOwner;
@@ -32,6 +33,7 @@ contract MultiSigWallet {
     //used to check the list of true signers
     mapping(address => bool) isValidSigner;
 
+    //the _validSigners should be array of stringed address
     constructor(address[] memory _validSigners, uint256 _quorum) {
         owner = msg.sender;
         signers = _validSigners;
@@ -43,5 +45,29 @@ contract MultiSigWallet {
 
             isValidSigner[_validSigners[i]] = true;
         }
+    }
+
+    //method to initiate transaction
+    function initiateTransaction(uint256 _amount, address _receiver) external {
+        require(msg.sender != address(0), "zero address detected");
+        require(_amount > 0, "no zero value allowed");
+
+        onlyValidSigner();
+
+        uint256 _txId = txCount + 1;
+
+        Transaction storage tns = transactions[_txId];
+
+        tns.id = _txId;
+        tns.amount = _amount;
+        tns.receiver = _receiver;
+        tns.signersCount = tns.signersCount + 1;
+        tns.txCreator = msg.sender;
+
+        allTransactions.push(tns);
+
+        hasSigned[_txId][msg.sender] = true;
+
+        txCount = txCount + 1;
     }
 }
