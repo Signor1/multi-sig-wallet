@@ -98,4 +98,14 @@ contract MultiSigWallet {
             payable(tns.receiver).transfer(tns.amount);
         }
     }
+
+    //this method allows the owner to add another signer or himself as part of the signers
+    function addValidSigner(address _newSigner) external {
+        onlyOwner();
+
+        require(!isValidSigner[_newSigner], "signer already exist");
+
+        isValidSigner[_newSigner] = true;
+        signers.push(_newSigner);
+    }
 }
