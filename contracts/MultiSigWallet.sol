@@ -8,4 +8,15 @@ contract MultiSigWallet {
 
     uint256 quorum;
     uint256 txCount;
+
+    struct Transaction {
+        uint256 id;
+        uint256 amount;
+        address receiver;
+        uint256 signersCount;
+        bool isExecuted;
+        address txCreator;
+    }
+
+    Transaction[] allTransactions;
 }
