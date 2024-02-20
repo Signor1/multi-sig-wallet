@@ -97,5 +97,18 @@ describe("Multi-Signature Wallet Contract", function () {
         multiSigWallet.initiateTransaction(0, address)
       ).to.be.revertedWith("no zero value allowed");
     });
+
+    it("Should check if the sender is a signer", async function () {
+      const { multiSigWallet, owner, otherAccount } = await loadFixture(
+        deployMultiSigWallet
+      );
+
+      let address = "0xFABB0ac9d68B0B445fB7357272Ff202C5651694a";
+
+      const tx = await multiSigWallet.initiateTransaction(1000, address);
+      tx.wait();
+
+      expect(tx).to.be.revertedWith("not valid signer");
+    });
   });
 });
