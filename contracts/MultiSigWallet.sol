@@ -41,11 +41,18 @@ contract MultiSigWallet {
 
         for (uint8 i = 0; i < _validSigners.length; i++) {
             //checking if any of the addresses is a zero address
-            require(_validSigners[i] != address(0), "get out");
+            require(
+                _validSigners[i] != address(0),
+                "Address zero is not allowed"
+            );
 
             isValidSigner[_validSigners[i]] = true;
         }
     }
+
+    //events
+    event TxInitiated(address indexed _txCreator, uint _amount);
+    event TxApproved(address indexed receiever, uint _amount);
 
     //method to initiate transaction
     function initiateTransaction(uint256 _amount, address _receiver) external {
@@ -69,6 +76,8 @@ contract MultiSigWallet {
         hasSigned[_txId][msg.sender] = true;
 
         txCount = txCount + 1;
+
+        emit TxInitiated(msg.sender, _amount);
     }
 
     //approve transaction
@@ -96,6 +105,8 @@ contract MultiSigWallet {
         if (tns.signersCount == quorum) {
             tns.isExecuted = true;
             payable(tns.receiver).transfer(tns.amount);
+
+            emit TxApproved(tns.receiver, tns.amount);
         }
     }
 
