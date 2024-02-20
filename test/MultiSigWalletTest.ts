@@ -89,19 +89,13 @@ describe("Multi-Signature Wallet Contract", function () {
       expect(tx).to.be.revertedWith("zero address detected");
     });
     it("Should not allow zero amount", async function () {
-      const { multiSigWallet, otherAccount } = await loadFixture(
-        deployMultiSigWallet
-      );
+      const { multiSigWallet } = await loadFixture(deployMultiSigWallet);
 
-      let amount = ethers.parseEther("0");
+      let address = "0xFABB0ac9d68B0B445fB7357272Ff202C5651694a";
 
-      const tx = await multiSigWallet.initiateTransaction(
-        0,
-        otherAccount.address
-      );
-      tx.wait();
-
-      expect(tx).to.be.revertedWith("no zero value allowed");
+      await expect(
+        multiSigWallet.initiateTransaction(0, address)
+      ).to.be.revertedWith("no zero value allowed");
     });
   });
 });
